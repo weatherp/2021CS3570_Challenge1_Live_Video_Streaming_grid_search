@@ -10,7 +10,6 @@ import numpy as np
 import multiprocessing as mp
 
 def test(testcase):
-    
     # -- Configuration variables --
     # Edit these variables to configure the simulator
     # Change which set of video trace to use: AsianCup_China_Uzbekistan, Fengtimo_2018_11_3, game, room, sports, YYF_2018_08_12
@@ -64,7 +63,7 @@ def test(testcase):
                                   Debug = DEBUG)
     
     abr = ABR.Algorithm()
-    abr_init = abr.Initial(testcase[3], testcases[4])
+    abr_init = abr.Initial(testcase[3], testcase[4])
 
     BIT_RATE      = [500.0,850.0,1200.0,1850.0] # kpbs
     TARGET_BUFFER = [0.5,1.0]   # seconds
@@ -262,8 +261,10 @@ if __name__ == "__main__":
             netwrok_traces = [sys.argv[2]]
     debug = False
     testcases = []
-    grid_reservoir = [i for i in range(4)]
-    grid_cushion = [i for i in range(4)]
+    # grid_reservoir = [i for i in range(4)]
+    # grid_cushion = [i for i in range(4)]
+    grid_reservoir = [0.1, 0.5, 1, 1.5, 2]
+    grid_cushion = [0.1, 0.5, 1, 1.5, 2]
     
     for res in grid_reservoir:
         for cus in grid_cushion:
@@ -275,13 +276,26 @@ if __name__ == "__main__":
     N = mp.cpu_count()
     for t in testcases:
         print(t)
-
-    # with mp.Pool(processes=N) as p:
-    #     results = p.map(test,testcases)
+    results = []
+    with mp.Pool(processes=N) as p:
+        for t in testcases:
+            results.append(p.map(test,t))
     ed_time = tm.time()
     
-    print(results)
-    print("score: ", np.mean(results ,axis = 0))
+    maxi = 0
+    max_result = 0
+    for i, r in enumerate(results):
+        print(f"res, cus = ({testcases[i][0][3]}, {testcases[i][0][4]})")
+        print(r)
+        now_res = np.mean(r ,axis = 0)
+        if(now_res > max_result):
+            max_result = now_res
+            max_i = i
+        print("score: ", now_res)
+    # print(results)
+    # print("score: ", np.mean(results ,axis = 0))
+
+    print(f"max result : ({testcases[i][0][3]}, {testcases[i][0][4]})")
 
     print(tm.strftime("cost %M m %S s", tm.gmtime(ed_time - st_time)))
     print("actual seconds :", ed_time - st_time)

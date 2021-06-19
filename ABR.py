@@ -16,7 +16,8 @@ class Algorithm:
      # Initail
      def Initial(self, res, cus):
      # Initail your session or something
-        self.some_param = 0
+        self.RESEVOIR = res
+        self.CUSHION = cus
 
      def f_buf(self, x):
          return ((x - self.RESEVOIR) * (self.RMAX - self.RMIN) / self.CUSHION) + self.RMIN
