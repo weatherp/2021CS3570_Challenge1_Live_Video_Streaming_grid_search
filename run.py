@@ -280,6 +280,9 @@ if __name__ == "__main__":
     with mp.Pool(processes=N) as p:
         for t in testcases:
             results.append(p.map(test,t))
+            print(f"res, cus = ({t[0][3]}, {t[0][4]})")
+            print(results[-1])
+            print(f"avg score : {np.mean(results[-1] ,axis = 0)}")
     ed_time = tm.time()
     
     maxi = 0
