@@ -1,3 +1,4 @@
+# run.py
 # import the env 
 import fixed_env as fixed_env
 import load_trace as load_trace
@@ -63,7 +64,7 @@ def test(testcase):
                                   Debug = DEBUG)
     
     abr = ABR.Algorithm()
-    abr_init = abr.Initial()
+    abr_init = abr.Initial(testcase[3], testcases[4])
 
     BIT_RATE      = [500.0,850.0,1200.0,1850.0] # kpbs
     TARGET_BUFFER = [0.5,1.0]   # seconds
@@ -231,6 +232,8 @@ def test(testcase):
     return [reward_all_sum / trace_count, run_time / trace_count]
 
 if __name__ == "__main__":
+    st_time = tm.time()
+
     if(sys.argv[1]=="all"):
         video_traces = [
             'AsianCup_China_Uzbekistan',
@@ -248,14 +251,37 @@ if __name__ == "__main__":
         ]
     else:
         video_traces = [sys.argv[1]]
-        netwrok_traces = [sys.argv[2]]
+        if sys.argv[2] == 'grid':
+            netwrok_traces = [
+            'fixed',
+            'low',
+            'medium',
+            'high'
+        ]
+        else:
+            netwrok_traces = [sys.argv[2]]
     debug = False
     testcases = []
-    for video_trace in video_traces:
-        for netwrok_trace in netwrok_traces:
-            testcases.append([video_trace, netwrok_trace, debug])
+    grid_reservoir = [i for i in range(4)]
+    grid_cushion = [i for i in range(4)]
+    
+    for res in grid_reservoir:
+        for cus in grid_cushion:
+            temp_case = []
+            for video_trace in video_traces:
+                for netwrok_trace in netwrok_traces:
+                    temp_case.append([video_trace, netwrok_trace, debug, res, cus])
+            testcases.append(temp_case)
     N = mp.cpu_count()
-    with mp.Pool(processes=N) as p:
-        results = p.map(test,testcases)
+    for t in testcases:
+        print(t)
+
+    # with mp.Pool(processes=N) as p:
+    #     results = p.map(test,testcases)
+    ed_time = tm.time()
+    
     print(results)
     print("score: ", np.mean(results ,axis = 0))
+
+    print(tm.strftime("cost %M m %S s", tm.gmtime(ed_time - st_time)))
+    print("actual seconds :", ed_time - st_time)
