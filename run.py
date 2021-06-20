@@ -291,8 +291,8 @@ if __name__ == "__main__":
         print(f"res, cus = ({testcases[i][0][3]}, {testcases[i][0][4]})")
         print(r)
         now_res = np.mean(r ,axis = 0)
-        if(now_res > max_result):
-            max_result = now_res
+        if(now_res[0] > max_result):
+            max_result = now_res[0]
             max_i = i
         print("score: ", now_res)
     # print(results)
