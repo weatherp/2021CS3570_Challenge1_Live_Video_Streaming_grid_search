@@ -263,9 +263,9 @@ if __name__ == "__main__":
     testcases = []
     # grid_reservoir = [i for i in range(4)]
     # grid_cushion = [i for i in range(4)]
-    grid_reservoir = [0.6, 0.7, 0.8]
-    grid_cushion = [0.9, 1.0, 1.1]
-    grid_latency = [3.3, 3.4, 3.5]
+    grid_reservoir = [0.7]
+    grid_cushion = [1.0]
+    grid_latency = [3.4]
     
     for res in grid_reservoir:
         for cus in grid_cushion:
