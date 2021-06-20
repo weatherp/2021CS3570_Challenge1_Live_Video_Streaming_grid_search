@@ -263,9 +263,9 @@ if __name__ == "__main__":
     testcases = []
     # grid_reservoir = [i for i in range(4)]
     # grid_cushion = [i for i in range(4)]
-    grid_reservoir = [0.7]
-    grid_cushion = [1.0]
-    grid_latency = [0, 1, 2, 3, 4, 5]
+    grid_reservoir = [0.5, 0.7, 0.9]
+    grid_cushion = [0.8, 1.0, 1.2]
+    grid_latency = [3.2, 3.4, 3.6]
     
     for res in grid_reservoir:
         for cus in grid_cushion:
@@ -300,7 +300,7 @@ if __name__ == "__main__":
     # print(results)
     # print("score: ", np.mean(results ,axis = 0))
 
-    print(f"max result : ({testcases[max_i][0][3]}, {testcases[max_i][0][4]}, {testcases[max_i][0][5]})")
+    print(f"max result : ({testcases[max_i][0][3]}, {testcases[max_i][0][4]}, {testcases[max_i][0][5]}), {results[max_i][0]}")
 
     print(tm.strftime("cost %M m %S s", tm.gmtime(ed_time - st_time)))
     print("actual seconds :", ed_time - st_time)
