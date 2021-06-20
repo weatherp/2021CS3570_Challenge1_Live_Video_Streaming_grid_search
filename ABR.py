@@ -10,14 +10,16 @@ class Algorithm:
         self.RMIN = self.BITRATE[0]
         self.RMAX = self.BITRATE[-1]
 
-        self.CUSHION = 1.3
-        self.RESEVOIR = 0.5
+        self.CUSHION = 1.0
+        self.RESEVOIR = 1.1
+        self.LATENCY_LIMIT = 4
     
      # Initail
-     def Initial(self, res, cus):
+     def Initial(self, res, cus, lat):
      # Initail your session or something
         self.RESEVOIR = res
         self.CUSHION = cus
+        self.LATENCY_LIMIT = lat
 
      def f_buf(self, x):
          return ((x - self.RESEVOIR) * (self.RMAX - self.RMIN) / self.CUSHION) + self.RMIN
@@ -85,7 +87,7 @@ class Algorithm:
              target_buffer = 1
 
          # testing about latency limit 
-         latency_limit = 4
+         latency_limit = self.LATENCY_LIMIT
 
          # for next iteration
          self.prev_rate = bit_rate

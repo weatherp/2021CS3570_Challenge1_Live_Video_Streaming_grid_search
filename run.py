@@ -63,7 +63,7 @@ def test(testcase):
                                   Debug = DEBUG)
     
     abr = ABR.Algorithm()
-    abr_init = abr.Initial(testcase[3], testcase[4])
+    abr_init = abr.Initial(testcase[3], testcase[4], testcase[5])
 
     BIT_RATE      = [500.0,850.0,1200.0,1850.0] # kpbs
     TARGET_BUFFER = [0.5,1.0]   # seconds
@@ -263,16 +263,18 @@ if __name__ == "__main__":
     testcases = []
     # grid_reservoir = [i for i in range(4)]
     # grid_cushion = [i for i in range(4)]
-    grid_reservoir = [0.1, 0.5, 1, 1.5, 2]
-    grid_cushion = [0.1, 0.5, 1, 1.5, 2]
+    grid_reservoir = [0.7]
+    grid_cushion = [1.0]
+    grid_latency = [0, 1, 2, 3, 4, 5]
     
     for res in grid_reservoir:
         for cus in grid_cushion:
-            temp_case = []
-            for video_trace in video_traces:
-                for netwrok_trace in netwrok_traces:
-                    temp_case.append([video_trace, netwrok_trace, debug, res, cus])
-            testcases.append(temp_case)
+            for lat in grid_latency:
+                temp_case = []
+                for video_trace in video_traces:
+                    for netwrok_trace in netwrok_traces:
+                        temp_case.append([video_trace, netwrok_trace, debug, res, cus, lat])
+                testcases.append(temp_case)
     N = mp.cpu_count()
     for t in testcases:
         print(t)
@@ -280,7 +282,7 @@ if __name__ == "__main__":
     with mp.Pool(processes=N) as p:
         for t in testcases:
             results.append(p.map(test,t))
-            print(f"res, cus = ({t[0][3]}, {t[0][4]})")
+            print(f"res, cus, lat = ({t[0][3]}, {t[0][4]}, {t[0][5]})")
             print(results[-1])
             print(f"avg score : {np.mean(results[-1] ,axis = 0)}")
     ed_time = tm.time()
@@ -288,7 +290,7 @@ if __name__ == "__main__":
     maxi = 0
     max_result = 0
     for i, r in enumerate(results):
-        print(f"res, cus = ({testcases[i][0][3]}, {testcases[i][0][4]})")
+        print(f"res, cus, lat = ({testcases[i][0][3]}, {testcases[i][0][4]}, {testcases[i][0][5]})")
         print(r)
         now_res = np.mean(r ,axis = 0)
         if(now_res[0] > max_result):
@@ -298,7 +300,7 @@ if __name__ == "__main__":
     # print(results)
     # print("score: ", np.mean(results ,axis = 0))
 
-    print(f"max result : ({testcases[i][0][3]}, {testcases[i][0][4]})")
+    print(f"max result : ({testcases[max_i][0][3]}, {testcases[max_i][0][4]}, {testcases[max_i][0][5]})")
 
     print(tm.strftime("cost %M m %S s", tm.gmtime(ed_time - st_time)))
     print("actual seconds :", ed_time - st_time)
