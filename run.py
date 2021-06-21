@@ -264,8 +264,8 @@ if __name__ == "__main__":
     # grid_reservoir = [i for i in range(4)]
     # grid_cushion = [i for i in range(4)]
     grid_reservoir = [0.7]
-    grid_cushion = [1.0]
-    grid_latency = [3.4]
+    grid_cushion = [0.9]
+    grid_latency = [3.2]
     
     for res in grid_reservoir:
         for cus in grid_cushion:
