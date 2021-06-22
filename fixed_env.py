@@ -48,6 +48,8 @@ class Environment:
         self.video_chunk_counter = 0
         self.buffer_size = 0
 
+        self.skip = False
+
         # pick a random trace file
         self.trace_idx = 0
         self.cooked_time = self.all_cooked_time[self.trace_idx]
@@ -89,7 +91,8 @@ class Environment:
         return self.trace_idx
 
     def get_video_frame(self, quality, target_buffer, latency_limit):
-
+        
+        # print(self.latency, self.video_chunk_counter, self.newest_frame, self.skip)
         assert quality >= 0
         assert quality < BITRATE_LEVELS
 

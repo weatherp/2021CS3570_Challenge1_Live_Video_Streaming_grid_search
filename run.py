@@ -26,8 +26,8 @@ def test(testcase):
     LOG_FILE_PATH = './log/'
     
     # create result directory
-    if not os.path.exists(LOG_FILE_PATH):
-        os.makedirs(LOG_FILE_PATH)
+    # if not os.path.exists(LOG_FILE_PATH):
+    #     os.makedirs(LOG_FILE_PATH)
 
     print(f"{VIDEO_TRACE},{NETWORK_TRACE}: Start")
     # -- End Configuration --
@@ -263,9 +263,9 @@ if __name__ == "__main__":
     testcases = []
     # grid_reservoir = [i for i in range(4)]
     # grid_cushion = [i for i in range(4)]
-    grid_reservoir = [0.7]
-    grid_cushion = [0.9]
-    grid_latency = [3.2]
+    grid_reservoir = [0.3]
+    grid_cushion = [1.2]
+    grid_latency = [1.0]
     
     for res in grid_reservoir:
         for cus in grid_cushion:
@@ -276,13 +276,14 @@ if __name__ == "__main__":
                         temp_case.append([video_trace, netwrok_trace, debug, res, cus, lat])
                 testcases.append(temp_case)
     N = mp.cpu_count()
+    N = 1
     for t in testcases:
         print(t)
     results = []
     with mp.Pool(processes=N) as p:
         for t in testcases:
             results.append(p.map(test,t))
-            print(f"res, cus, lat = ({t[0][3]}, {t[0][4]}, {t[0][5]})")
+            print(f"res, cus, lambda = ({t[0][3]}, {t[0][4]}, {t[0][5]})")
             print(results[-1])
             print(f"avg score : {np.mean(results[-1] ,axis = 0)}")
     ed_time = tm.time()
@@ -290,7 +291,7 @@ if __name__ == "__main__":
     maxi = 0
     max_result = 0
     for i, r in enumerate(results):
-        print(f"res, cus, lat = ({testcases[i][0][3]}, {testcases[i][0][4]}, {testcases[i][0][5]})")
+        print(f"res, cus, lambda = ({testcases[i][0][3]}, {testcases[i][0][4]}, {testcases[i][0][5]})")
         print(r)
         now_res = np.mean(r ,axis = 0)
         if(now_res[0] > max_result):

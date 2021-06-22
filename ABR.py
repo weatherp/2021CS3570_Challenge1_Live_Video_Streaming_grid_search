@@ -5,21 +5,27 @@
 class Algorithm:
      def __init__(self):
      # fill your self params
-        self.prev_rate = 0
-        self.BITRATE = [500.0, 850.0, 1200.0, 1850.0] 
+        # same value
+        self.BITRATE = [500.0, 850.0, 1200.0, 1850.0]
         self.RMIN = self.BITRATE[0]
         self.RMAX = self.BITRATE[-1]
+        self.frame_time_len = 0.04
+        self.SKIP_PENALTY = 0.5
 
-        self.CUSHION = 1.0
-        self.RESEVOIR = 1.1
-        self.LATENCY_LIMIT = 4
+        # variable value
+        self.prev_rate = 0
+
+        # value need to tune
+        self.LAMBDA = 1.0
+        self.CUSHION = 0.7
+        self.RESEVOIR = 0.9
     
      # Initail
-     def Initial(self, res, cus, lat):
+     def Initial(self, res, cus, lam):
      # Initail your session or something
         self.RESEVOIR = res
         self.CUSHION = cus
-        self.LATENCY_LIMIT = lat
+        self.LAMBDA = lam
 
      def f_buf(self, x):
          return ((x - self.RESEVOIR) * (self.RMAX - self.RMIN) / self.CUSHION) + self.RMIN
@@ -88,8 +94,17 @@ class Algorithm:
          else:
              target_buffer = 0
 
-         # testing about latency limit 
-         latency_limit = self.LATENCY_LIMIT
+         # QoE based latency limit
+         # LAMBDA may need tuning (?) 
+         LATENCY_PENALTY = 0.005
+         if S_end_delay[-1] <=1.0:
+            LATENCY_PENALTY = 0.005
+         else:
+            LATENCY_PENALTY = 0.01
+
+        #  latency_limit = S_skip_time[-1] * self.SKIP_PENALTY / (LATENCY_PENALTY * self.LAMBDA)
+         latency_limit = 3.2
+        #  print(S_skip_time[-1],S_end_delay[-1], latency_limit)
 
          # for next iteration
          self.prev_rate = bit_rate
