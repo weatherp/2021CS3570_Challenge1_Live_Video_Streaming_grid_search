@@ -81,10 +81,12 @@ class Algorithm:
              bit_rate = self.prev_rate
 
          # determine target buffer by buffer size
-         if buf_now < RESEVOIR:
-             target_buffer = 0
-         else:
+         # if in [B^0_min, B^0_max), target_buffer = 1
+         # otherwise, target_buffer = 0
+         if 0.3 <= buf_now and buf_now < 1.0:
              target_buffer = 1
+         else:
+             target_buffer = 0
 
          # testing about latency limit 
          latency_limit = self.LATENCY_LIMIT
