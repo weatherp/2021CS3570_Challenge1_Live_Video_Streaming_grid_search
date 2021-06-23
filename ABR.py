@@ -102,8 +102,8 @@ class Algorithm:
          else:
             LATENCY_PENALTY = 0.01
 
-        #  latency_limit = S_skip_time[-1] * self.SKIP_PENALTY / (LATENCY_PENALTY * self.LAMBDA)
-         latency_limit = 3.2
+         latency_limit = self.frame_time_len * (self.BITRATE[bit_rate]/1000.0 + self.SKIP_PENALTY) / (LATENCY_PENALTY * self.LAMBDA)
+        #  latency_limit = 3.2
         #  print(S_skip_time[-1],S_end_delay[-1], latency_limit)
 
          # for next iteration
