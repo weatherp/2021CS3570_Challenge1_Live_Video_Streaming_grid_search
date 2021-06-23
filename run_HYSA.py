@@ -5,7 +5,7 @@ import load_trace as load_trace
 #import matplotlib.pyplot as plt
 import time as tm
 # import ABR
-import ABR
+import ABR_HYSA as ABR
 import os, sys
 import numpy as np
 import multiprocessing as mp

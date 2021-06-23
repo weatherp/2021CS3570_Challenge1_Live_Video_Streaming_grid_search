@@ -50,6 +50,7 @@ class Algorithm:
          bit_rate, target_buffer = decison//4, decison % 4 .....
          return bit_rate, target_buffer'''
 
+        #  print(S_chunk_len[-1], S_time_interval[-1], time, S_send_data_size[-1])
          # If you choose BBA-0
          RESEVOIR = self.RESEVOIR
          CUSHION =  self.CUSHION
