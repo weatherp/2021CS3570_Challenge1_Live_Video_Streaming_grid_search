@@ -4,7 +4,8 @@ import fixed_env as fixed_env
 import load_trace as load_trace
 #import matplotlib.pyplot as plt
 import time as tm
-import ABR
+# import ABR
+import ABR_HYSA as ABR
 import os, sys
 import numpy as np
 import multiprocessing as mp
@@ -265,7 +266,7 @@ if __name__ == "__main__":
     # grid_cushion = [i for i in range(4)]
     grid_reservoir = [0.3]
     grid_cushion = [1.2]
-    grid_latency = [2.5]
+    grid_latency = [2.8]
     
     for res in grid_reservoir:
         for cus in grid_cushion:
