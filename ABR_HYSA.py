@@ -26,21 +26,23 @@ class Algorithm:
         self.l_max = 30.0
         self.N_WMA = 5
         self.N_1 = 5
-        self.beta = 1
+        self.beta = 0.5
         self.buffer_threshold = 1.4
+
+         
+    
+     # Initail
+     def Initial(self, lmin, lmax, beta):
+     # Initail your session or something
+        self.l_min = lmin
+        self.l_max = lmax
+        self.beta = beta
 
         # calculated value
         self.R_history = [[0] * self.N_1 for _ in range(self.BITRATE_LEVEL)] # (self.BITRATE_LEVEL, self.N_1)
         self.C_denominator = self.N_WMA * (self.N_WMA + 1) / 2
         self.SC_slowest = 2/(self.l_max + 1)
-        self.SC_fastest = 2/(self.l_min + 1) 
-    
-     # Initail
-     def Initial(self, lmin, lmax, Bth):
-     # Initail your session or something
-        self.l_min = lmin
-        self.l_max = lmax
-        self.buffer_threshold = Bth
+        self.SC_fastest = 2/(self.l_min + 1)
 
      # Define your algo
      def run(self, time, S_time_interval, S_send_data_size, S_chunk_len, S_rebuf, S_buffer_size, 
