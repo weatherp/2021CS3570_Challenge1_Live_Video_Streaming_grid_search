@@ -266,7 +266,7 @@ if __name__ == "__main__":
     # grid_cushion = [i for i in range(4)]
     grid_reservoir = [2]
     grid_cushion = [30]
-    grid_latency = [2.8]
+    grid_latency = [1.4]
     
     for res in grid_reservoir:
         for cus in grid_cushion:
@@ -276,8 +276,8 @@ if __name__ == "__main__":
                     for netwrok_trace in netwrok_traces:
                         temp_case.append([video_trace, netwrok_trace, debug, res, cus, lat])
                 testcases.append(temp_case)
-    # N = mp.cpu_count()
-    N = 1
+    N = mp.cpu_count()
+    # N = 1
     for t in testcases:
         print(t)
     results = []

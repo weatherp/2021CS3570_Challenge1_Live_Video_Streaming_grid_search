@@ -18,14 +18,15 @@ class Algorithm:
         self.prev_R_hat = [0] * self.BITRATE_LEVEL  # (self.BITRATE_LEVEL, )
 
         # value need to tune
-        self.LAMBDA = 1.0
-        self.CUSHION = 0.7
+        self.LAMBDA = 2.8
         self.RESEVOIR = 0.9
+        self.CUSHION = 0.7
         self.l_min = 2.0
         self.l_max = 30.0
-        self.N_WMA = 50
-        self.N_1 = 50
+        self.N_WMA = 5
+        self.N_1 = 5
         self.beta = 1
+        self.buffer_threshold = 1.4
 
         # calculated value
         self.R_history = [[0] * self.N_1 for _ in range(self.BITRATE_LEVEL)] # (self.BITRATE_LEVEL, self.N_1)
@@ -34,11 +35,11 @@ class Algorithm:
         self.SC_fastest = 2/(self.l_min + 1) 
     
      # Initail
-     def Initial(self, lmin, lmax, lam):
+     def Initial(self, lmin, lmax, Bth):
      # Initail your session or something
         self.l_min = lmin
         self.l_max = lmax
-        self.LAMBDA = lam
+        self.buffer_threshold = Bth
 
      # Define your algo
      def run(self, time, S_time_interval, S_send_data_size, S_chunk_len, S_rebuf, S_buffer_size, 
@@ -63,7 +64,6 @@ class Algorithm:
          v       estimated frame accumulation speed in CDN
 
          '''
-         # default bitrate = 0
          buf_now = S_buffer_size[-1]
          bit_rate = 0
 
@@ -113,19 +113,15 @@ class Algorithm:
             # calculate 
             v = self.beta * (cdn_newest_id - self.prev_cdn_newest_id) * self.frame_time_len / sum(S_time_interval[-50:])
             # latency caused by accumulated video at CDN after next downloading interval
-            D_cdn = max((cdn_newest_id - self.prev_cdn_newest_id)*self.frame_time_len + v*T - self.frame_time_len*self.segment_length, 0)
+            D_cdn = max((cdn_newest_id - download_id)*self.frame_time_len + v*T - self.frame_time_len*self.segment_length, 0)
 
-            print(b, B, D_cdn)
-            
-            if min_estimate_latency > B + D_cdn and B > 1.0:
-                print("in!!!")
+            if min_estimate_latency > B + D_cdn and B > self.buffer_threshold:
                 min_estimate_latency = B + D_cdn
                 bit_rate = b
 
             # for next segment
             self.prev_R_hat[b] = R_hat
 
-         print(bit_rate)
          # naive buffer based (default  code)
         #  reservoir = 0.3
         #  cushion = 1.2

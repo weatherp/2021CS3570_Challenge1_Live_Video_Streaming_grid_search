@@ -276,8 +276,8 @@ if __name__ == "__main__":
                     for netwrok_trace in netwrok_traces:
                         temp_case.append([video_trace, netwrok_trace, debug, res, cus, lat])
                 testcases.append(temp_case)
-    # N = mp.cpu_count()
-    N = 1
+    N = mp.cpu_count()
+    # N = 1
     for t in testcases:
         print(t)
     results = []
