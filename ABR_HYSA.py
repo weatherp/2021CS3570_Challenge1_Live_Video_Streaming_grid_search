@@ -11,6 +11,7 @@ class Algorithm:
         self.SKIP_PENALTY = 0.5
         self.BITRATE_LEVEL = 4
         self.segment_length = 50
+        self.segment_time_len = self.frame_time_len * self.segment_length
 
         # variable value
         self.prev_rate = 0
@@ -79,7 +80,7 @@ class Algorithm:
          ## estimate R_hat for every bitrate using KAMA
          ## R : bps
          min_estimate_latency = sys.maxsize
-         prev_R = S_send_data_size[-1] / self.frame_time_len
+         prev_R  = sum(S_send_data_size[-50:]) / self.segment_time_len
          for b in range(self.BITRATE_LEVEL):
             self.R_history[b].append(prev_R * (self.BITRATE[b] / self.BITRATE[self.prev_rate]))
             
